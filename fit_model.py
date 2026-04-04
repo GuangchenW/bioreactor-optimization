@@ -86,7 +86,7 @@ ax.plot(
     lw=2,
     label=(
         f"$f(x) = ax^4/(b+x^5)$\n"
-        f"  a={popt_p[0]:.4f}, b={popt_p[1]:.4f}, R²={metrics_p['R2']:.4f}"
+        f"  a={popt_p[0]:.4f}, b={popt_p[1]:.4f}, $R^2$={metrics_p['R2']:.4f}"
     ),
 )
 ax.plot(
@@ -98,7 +98,7 @@ ax.plot(
     label=(
         f"$f(x) = ax^p/(b+x^q)$\n"
         f"  a={popt_g[0]:.4f}, p={popt_g[1]:.2f}, "
-        f"b={popt_g[2]:.4f}, q={popt_g[3]:.2f}, R²={metrics_g['R2']:.4f}"
+        f"b={popt_g[2]:.4f}, q={popt_g[3]:.2f}, $R^2$={metrics_g['R2']:.4f}"
     ),
 )
 ax.set_xlabel("Input (O2 flow rate)", fontsize=12)
