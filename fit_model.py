@@ -2,18 +2,20 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.rcParams.update({'font.size': 16})
 
 
 # --- Load data --- #
 df = pd.read_csv("data/base.csv")
 x_data = df["input"].values
-y_data = ((df["Flat"] + df["50x50"] + df["15x15"]) / 3).values
+y_data = ((df["flat"] + df["50x50"] + df["15x15"]) / 3).values
 
 
 # --- Model definitions --- #
 def model_parsimonious(x, a, b):
-    """f(x) = a*x^4 / (b + x^5) — 2-param integer-exponent Hill form."""
-    return a * x**4 / (b + x**5)
+    """f(x) = a*x^3 / (b + x^4) — 2-param integer-exponent Hill form."""
+    return a * x**3 / (b + x**4)
 
 
 def model_general(x, a, p, b, q):
@@ -53,7 +55,7 @@ metrics_g = compute_metrics(y_data, y_pred_g, k=4)
 
 # --- Print results --- #
 print("=" * 60)
-print("MODEL 1: f(x) = ax^4 / (b + x^5)")
+print("MODEL 1: f(x) = ax^3 / (b + x^4)")
 print(f"  a = {popt_p[0]:.6f} ± {perr_p[0]:.6f}")
 print(f"  b = {popt_p[1]:.6f} ± {perr_p[1]:.6f}")
 print(f"  {metrics_p}")
@@ -85,7 +87,7 @@ ax.plot(
     "b-",
     lw=2,
     label=(
-        f"$f(x) = ax^4/(b+x^5)$\n"
+        f"$f(x) = ax^3/(b+x^4)$\n"
         f"  a={popt_p[0]:.4f}, b={popt_p[1]:.4f}, $R^2$={metrics_p['R2']:.4f}"
     ),
 )
@@ -101,9 +103,8 @@ ax.plot(
         f"b={popt_g[2]:.4f}, q={popt_g[3]:.2f}, $R^2$={metrics_g['R2']:.4f}"
     ),
 )
-ax.set_xlabel("Input (O2 flow rate)", fontsize=12)
-ax.set_ylabel("Output (O2 concentration delta)", fontsize=12)
-ax.set_title("Model Fitting: Generalized Hill Function", fontsize=14)
+ax.set_xlabel("$O_2$ flow rate ($\\mu l/min$)")
+ax.set_ylabel("$\\delta$ ($mol/m^3$)")
 ax.legend(fontsize=10, loc="upper right")
 ax.grid(True, alpha=0.3)
 
@@ -120,8 +121,8 @@ ax2.scatter(
     label=f"$ax^p/(b+x^q)$ residuals",
 )
 ax2.axhline(0, color="black", lw=0.5)
-ax2.set_xlabel("Input (O2 flow rate)", fontsize=12)
-ax2.set_ylabel("Residual", fontsize=12)
+ax2.set_xlabel("$O_2$ flow rate ($\\mu l/min$)")
+ax2.set_ylabel("Residual")
 ax2.legend(fontsize=9)
 ax2.grid(True, alpha=0.3)
 
